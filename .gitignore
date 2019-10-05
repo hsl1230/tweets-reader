@@ -1,0 +1,17 @@
+/*.txt
+.project
+.classpath
+.settings
+build/
+bin/
+test-output/
+.gradle/
+.factorypath
+/.apt_generated/
+.checkstyle
+*.log
+/out/
+/.idea
+/*.iml
+*.swp
+tags
