@@ -1,5 +1,6 @@
 package com.henry.tweetsreader;
 
+import com.henry.tweetsreader.service.ConsoleOperator;
 import com.henry.tweetsreader.service.ContextService;
 import com.henry.tweetsreader.service.TweetsReader;
 import org.springframework.beans.factory.annotation.Autowired;

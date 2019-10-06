@@ -4,8 +4,6 @@ plugins {
   id 'java'
 }
 
-group = 'com.henry'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -14,6 +12,7 @@ repositories {
 
 bootRun {
   standardInput = System.in
+  standardOutput = System.out
 }
 
 dependencies {

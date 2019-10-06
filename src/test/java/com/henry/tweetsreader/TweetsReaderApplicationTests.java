@@ -1,35 +1,44 @@
 package com.henry.tweetsreader;
 
+import com.henry.tweetsreader.service.ConsoleOperator;
+import com.henry.tweetsreader.service.ContextService;
 import com.henry.tweetsreader.service.TweetsReader;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+//@RunWith(MockitoJUnitRunner.class)
+//@SpringBootTest(classes=TweetsReaderApplication.class)
 public class TweetsReaderApplicationTests {
-//  @MockBean
-//  private TweetsReader tweetsReader;
-//
-  @MockBean
+  @Mock
+  private TweetsReader tweetsReader;
+
+  @Mock
   private ConsoleOperator consoleOperator;
+
+  @Mock
+  private ContextService contextService;
 
   @Before
   public void setup() throws IOException {
-    MockitoAnnotations.initMocks(this);
-    Mockito.doReturn("topic1").when(consoleOperator).readLine();
-//    Mockito.doNothing().when(tweetsReader).readTopics(Mockito.anyList());
+//    MockitoAnnotations.initMocks(this);
+    Mockito.when(consoleOperator.readLine()).thenReturn("topic1");
+    Mockito.doNothing().when(tweetsReader).readTopics(Mockito.anyList());
+    Mockito.doReturn(".").when(contextService).getTweetsFilePath();
   }
 
-//  @Test
+  @Test
   public void contextLoads() {
-  }
+   }
 
 }
