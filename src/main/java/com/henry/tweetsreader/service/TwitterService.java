@@ -27,13 +27,18 @@ public class TwitterService {
 
   private TwitterApiClient client;
   private ContextService contextService;
+  private MetaDataService metaDataService;
 
   private ObjectMapper objectMapper = new ObjectMapper();
 
   @Autowired
-  public TwitterService(TwitterApiClient client, ContextService contextService) {
+  public TwitterService(
+      TwitterApiClient client,
+      ContextService contextService,
+      MetaDataService metaDataService) {
     this.client = client;
     this.contextService = contextService;
+    this.metaDataService = metaDataService;
   }
 
   public void readTweetsOf(String topic) {
@@ -48,9 +53,11 @@ public class TwitterService {
 
     SearchMetadata metadata = contextService.findSearchMetadataOf(topic);
     if (metadata == null || metadata.getNextResults() == null) {
+      long maxId = metaDataService.getMaxTweetIdOf(topic);
       Map<String, String> queryParameters = new HashMap<>();
       queryParameters.put("q", "%23" + topic);
       queryParameters.put("count", "50");
+      queryParameters.put("max_id", String.valueOf(maxId));
       result = client.doGet("/1.1/search/tweets.json", queryParameters, Tweets.class);
     } else {
       result = client.doGet("/1.1/search/tweets.json"
@@ -68,6 +75,8 @@ public class TwitterService {
           LOG.error("write tweet failed! tweet id: " + tweet.getIdStr(), ex);
         }
       });
+
+      metaDataService.logMaxTweetId(topic, result.getSearchMetadata().getSinceId());
 
       contextService.updateSearchMetadata(topic, result.getSearchMetadata());
     } catch (Exception ex) {
