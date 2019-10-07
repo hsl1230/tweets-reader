@@ -1,16 +1,15 @@
 package com.henry.tweetsreader.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class MetaDataService {
@@ -21,8 +20,13 @@ public class MetaDataService {
     this.contextService = contextService;
   }
 
+  /**
+   * return max tweet id stored in the user defined file attribute.
+   * @param topic topic
+   * @return max tweet id
+   */
   public long getMaxTweetIdOf(String topic) {
-    Path path = Paths.get(contextService.getTweetsFilePath(), topic + ".txt");
+    Path path = contextService.getFilePathOf(topic);
     long maxTweetId = -1;
     try {
       FileStore fileStore = Files.getFileStore(path);
@@ -35,7 +39,7 @@ public class MetaDataService {
           );
           attsView.read("maxTweetId", buf);
           buf.flip();
-          maxTweetId = Integer.valueOf(
+          maxTweetId = Long.valueOf(
               StandardCharsets.UTF_8.decode(buf).toString()
           );
         }
@@ -47,8 +51,14 @@ public class MetaDataService {
     return maxTweetId;
   }
 
+
+  /**
+   * log max tweet id as a user defined file attribte
+   * @param topic
+   * @param value
+   */
   public void logMaxTweetId(String topic, long value) {
-    Path path = Paths.get(contextService.getTweetsFilePath(), topic + ".txt");
+    Path path = contextService.getFilePathOf(topic);
     try {
       FileStore fileStore = Files.getFileStore(path);
       if (fileStore.supportsFileAttributeView(UserDefinedFileAttributeView.class)) {
