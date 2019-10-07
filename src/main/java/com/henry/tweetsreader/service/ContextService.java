@@ -18,7 +18,7 @@ public class ContextService {
   private Hashtable<String, Boolean> topicIntializedFlags = new Hashtable<>();
 
   /**
-   * out put file directory of tweets
+   * out put file directory of tweets.
    */
   public String getTweetsFilePath() {
     return tweetsFilePath;
@@ -43,6 +43,11 @@ public class ContextService {
     return searchMetadataHashtable.get(topic);
   }
 
+  /**
+   * the file related to the topic is initialized or not.
+   * @param topic the topic
+   * @return boolean
+   */
   public boolean isTopicInitialized(String topic) {
     Boolean flag = topicIntializedFlags.get(topic);
     if (flag == null) {

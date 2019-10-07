@@ -2,7 +2,6 @@
 package com.henry.tweetsreader.service.resources;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -13,22 +12,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"urls"})
-public class Description {
+@JsonPropertyOrder({
+    "description"
+    })
+public class Entities2 {
 
-  @JsonProperty("urls")
-  private List<Object> urls = null;
+  @JsonProperty("description")
+  private Description description;
   @JsonIgnore
   private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-  @JsonProperty("urls")
-  public List<Object> getUrls() {
-    return urls;
+  @JsonProperty("description")
+  public Description getDescription() {
+    return description;
   }
 
-  @JsonProperty("urls")
-  public void setUrls(List<Object> urls) {
-    this.urls = urls;
+  @JsonProperty("description")
+  public void setDescription(Description description) {
+    this.description = description;
   }
 
   @JsonAnyGetter

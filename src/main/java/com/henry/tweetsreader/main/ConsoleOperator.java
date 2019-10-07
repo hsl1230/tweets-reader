@@ -10,6 +10,11 @@ public class ConsoleOperator {
   private final BufferedReader reader;
   private final PrintWriter writer;
 
+  /**
+   * constructor of console operator.
+   * @param reader Reader
+   * @param writer PrintWriter
+   */
   public ConsoleOperator(Reader reader, PrintWriter writer) {
     Objects.requireNonNull(reader, "reader can not be null");
     Objects.requireNonNull(writer, "writer can not be null");

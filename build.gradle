@@ -2,12 +2,18 @@ plugins {
   id 'org.springframework.boot' version '2.1.9.RELEASE'
   id 'io.spring.dependency-management' version '1.0.8.RELEASE'
   id 'java'
+  id 'checkstyle'
 }
 
 sourceCompatibility = '1.8'
 
 repositories {
   mavenCentral()
+}
+
+checkstyle {
+  configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+  toolVersion = '6.11.2'
 }
 
 bootRun {

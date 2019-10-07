@@ -26,6 +26,12 @@ public class TweetsReaderApplication {
     private TweetsReader tweetsReader;
     private ContextService contextService;
 
+    /**
+     * constructor of runner.
+     * @param consoleOperator console operator
+     * @param tweetsReader tweets reader
+     * @param contextService context service
+     */
     @Autowired
     public MyRunner(
         ConsoleOperator consoleOperator,
@@ -65,7 +71,7 @@ public class TweetsReaderApplication {
       contextService.setTweetsFilePath(outputPath);
 
       if (topics.size() < 5) {
-        for (int i=topics.size() + 1; i < 6;) {
+        for (int i = topics.size() + 1; i < 6;) {
           consoleOperator.print("Please input topic " + i + ": ");
           String topic = consoleOperator.readLine().trim();
           if (topic != null && !topic.isEmpty()) {

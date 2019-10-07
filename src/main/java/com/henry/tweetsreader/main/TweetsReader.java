@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -44,19 +43,19 @@ public class TweetsReader {
     Assert.notEmpty(topics, "topics must be specified");
 
     List<TopicReader> topicReaders = new ArrayList<>();
-    topics.stream().forEach(
+    topics.forEach(
         topic -> topicReaders.add(
             new TopicReader(topic, twitterService, millisecondsForHttpRecovering)));
 
     while (true) {
       try {
-        topicReaders.stream().forEach(topicReader -> {
+        topicReaders.forEach(topicReader -> {
           if (!topicReader.isRunning()) {
             executor.execute(topicReader);
           }
         });
       } catch (Exception ex) {
-        LOG.error("execute task failed!", ex);
+        LOG.warn("execute task failed!", ex);
         AppUtils.sleep(millisecondsForPoolRecovering, "waiting for the recovering of launching tasks");
       }
 

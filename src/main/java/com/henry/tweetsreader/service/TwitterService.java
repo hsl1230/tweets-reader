@@ -31,6 +31,12 @@ public class TwitterService {
 
   private ObjectMapper objectMapper = new ObjectMapper();
 
+  /**
+   * Constructor of TwiterService.
+   * @param client client to access twitter api
+   * @param contextService context service
+   * @param metaDataService metadata service
+   */
   @Autowired
   public TwitterService(TwitterApiClient client, ContextService contextService, MetaDataService metaDataService) {
     this.client = client;
@@ -81,7 +87,7 @@ public class TwitterService {
 
     try (BufferedWriter writer = Files.newBufferedWriter(
         path, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
-      result.getStatuses().stream().forEach(tweet -> {
+      result.getStatuses().forEach(tweet -> {
         try {
           writer.write(objectMapper.writeValueAsString(tweet));
           writer.write("\n");

@@ -72,18 +72,18 @@ public class TwitterApiClient {
   /**
    * forward rest request to rest template.
    */
-  public <RequestBody, ResponseBody> ResponseBody doExchange(
+  public <RequestBodyT, ResponseBodyT> ResponseBodyT doExchange(
       String path,
       Map<String, String> queryParameters,
-      ParameterizedTypeReference<ResponseBody> responseType,
+      ParameterizedTypeReference<ResponseBodyT> responseType,
       HttpMethod method,
-      RequestBody requestBody,
+      RequestBodyT requestBody,
       MultiValueMap<String, String> headers
   ) {
     RequestEntity request = createRequestEntity(
         path, queryParameters, method, requestBody, headers);
     try {
-      ResponseEntity<ResponseBody> response = getRestTemplate().exchange(request, responseType);
+      ResponseEntity<ResponseBodyT> response = getRestTemplate().exchange(request, responseType);
       return response.getBody();
     } catch (Exception e) {
       LOG.error("call endpoint error", e);
@@ -94,18 +94,18 @@ public class TwitterApiClient {
   /**
    * forward rest request to rest template.
    */
-  public <RequestBody, ResponseBody> ResponseBody doExchange(
+  public <RequestBodyT, ResponseBodyT> ResponseBodyT doExchange(
       String path,
       Map<String, String> queryParameters,
-      Class<ResponseBody> responseType,
+      Class<ResponseBodyT> responseType,
       HttpMethod method,
-      RequestBody requestBody,
+      RequestBodyT requestBody,
       MultiValueMap<String, String> headers
   ) {
     RequestEntity request = createRequestEntity(
         path, queryParameters, method, requestBody, headers);
     try {
-      ResponseEntity<ResponseBody> response = getRestTemplate().exchange(request, responseType);
+      ResponseEntity<ResponseBodyT> response = getRestTemplate().exchange(request, responseType);
       return response.getBody();
     } catch (HttpClientErrorException e) {
       LOG.error("call endpoint error: " + e.getResponseBodyAsString(), e);
@@ -119,10 +119,10 @@ public class TwitterApiClient {
   /**
    * convenient method for POST request.
    */
-  public <RequestBody, ResponseBody> ResponseBody doPost(
+  public <RequestBodyT, ResponseBodyT> ResponseBodyT doPost(
       String path,
-      RequestBody requestBody,
-      ParameterizedTypeReference<ResponseBody> responseType
+      RequestBodyT requestBody,
+      ParameterizedTypeReference<ResponseBodyT> responseType
   ) {
     return doExchange(path, null, responseType, HttpMethod.POST, requestBody, null);
   }
@@ -130,10 +130,10 @@ public class TwitterApiClient {
   /**
    * convenient method for POST request.
    */  
-  public <RequestBody, ResponseBody> ResponseBody doPost(
+  public <RequestBodyT, ResponseBodyT> ResponseBodyT doPost(
       String path,
-      RequestBody requestBody,
-      Class<ResponseBody> responseType
+      RequestBodyT requestBody,
+      Class<ResponseBodyT> responseType
   ) {
     return doExchange(path, null, responseType, HttpMethod.POST, requestBody, null);
   }
@@ -141,10 +141,10 @@ public class TwitterApiClient {
   /**
    * convenient method for POST request.
    */  
-  public <RequestBody, ResponseBody> ResponseBody doPost(
+  public <RequestBodyT, ResponseBodyT> ResponseBodyT doPost(
       String path,
-      RequestBody requestBody,
-      Class<ResponseBody> responseType,
+      RequestBodyT requestBody,
+      Class<ResponseBodyT> responseType,
       MultiValueMap<String, String> headers
   ) {
     return doExchange(path, null, responseType, HttpMethod.POST, requestBody, headers);
@@ -153,10 +153,10 @@ public class TwitterApiClient {
   /**
    * convenient method for POST request.
    */
-  public <RequestBody, ResponseBody> ResponseBody doPost(
+  public <RequestBodyT, ResponseBodyT> ResponseBodyT doPost(
       String path,
-      RequestBody requestBody,
-      ParameterizedTypeReference<ResponseBody> responseType,
+      RequestBodyT requestBody,
+      ParameterizedTypeReference<ResponseBodyT> responseType,
       MultiValueMap<String, String> headers
   ) {
     return doExchange(path, null, responseType, HttpMethod.POST, requestBody, headers);
@@ -189,7 +189,7 @@ public class TwitterApiClient {
   /**
    * convenient method for GET request.
    */  
-  public<T> T doGet(
+  public <T> T doGet(
       String path,
       Map<String, String> queryParameters,
       Class<T> responseType
@@ -200,7 +200,7 @@ public class TwitterApiClient {
   /**
    * convenient method for GET request.
    */  
-  public<T> T doGet(
+  public <T> T doGet(
       String path,
       Map<String, String> queryParameters,
       ParameterizedTypeReference<T> responseType
@@ -229,7 +229,7 @@ public class TwitterApiClient {
 
     StringBuilder requestParam = new StringBuilder();
     if (queryParameters != null) {
-      queryParameters.entrySet().stream().forEach(entry -> {
+      queryParameters.entrySet().forEach(entry -> {
         if (requestParam.length() == 0) {
           requestParam.append("?");
         } else {
@@ -254,7 +254,7 @@ public class TwitterApiClient {
         uri = new URI(getBaseUrl() + path + requestParam.toString());
       }
 
-      return new RequestEntity(requestBody, theHeaders, method, uri);
+      return new RequestEntity<>(requestBody, theHeaders, method, uri);
     } catch (Exception e) {
       LOG.error("create uri error", e);
       throw new RuntimeException(e);

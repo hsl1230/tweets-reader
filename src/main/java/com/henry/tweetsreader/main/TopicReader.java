@@ -25,9 +25,8 @@ public class TopicReader implements Runnable {
    * to create a thread, starting the thread causes the object's
    * <code>run</code> method to be called in that separately executing
    * thread.
-   * <p>
-   * The general contract of the method <code>run</code> is that it may
-   * take any action whatsoever.
+   * <p>The general contract of the method <code>run</code> is that it may
+   * take any action whatsoever.</p>
    *
    * @see Thread#run()
    */

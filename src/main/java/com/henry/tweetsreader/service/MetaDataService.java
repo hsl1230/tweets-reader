@@ -8,11 +8,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MetaDataService {
+  private static final Logger LOG = LoggerFactory.getLogger(MetaDataService.class);
+
   private ContextService contextService;
 
   @Autowired
@@ -28,6 +32,10 @@ public class MetaDataService {
   public long getMaxTweetIdOf(String topic) {
     Path path = contextService.getFilePathOf(topic);
     long maxTweetId = -1;
+    if (!Files.exists(path)) {
+      return maxTweetId;
+    }
+
     try {
       FileStore fileStore = Files.getFileStore(path);
       if (fileStore.supportsFileAttributeView(UserDefinedFileAttributeView.class)) {
@@ -45,7 +53,7 @@ public class MetaDataService {
         }
       }
     } catch (Exception ex) {
-      //TODO: log
+      LOG.warn("tweet id can not be extracted from the file attribute", ex);
     }
 
     return maxTweetId;
@@ -53,12 +61,16 @@ public class MetaDataService {
 
 
   /**
-   * log max tweet id as a user defined file attribte
-   * @param topic
-   * @param value
+   * log max tweet id as a user defined file attribute.
+   * @param topic topic name
+   * @param value tweet id
    */
   public void logMaxTweetId(String topic, long value) {
     Path path = contextService.getFilePathOf(topic);
+    if (!Files.exists(path)) {
+      return;
+    }
+
     try {
       FileStore fileStore = Files.getFileStore(path);
       if (fileStore.supportsFileAttributeView(UserDefinedFileAttributeView.class)) {
@@ -68,7 +80,7 @@ public class MetaDataService {
         attsView.write("maxTweetId", buffer);
       }
     } catch (Exception ex) {
-
+      LOG.warn("tweet id can not be saved into the file attribute", ex);
     }
 
   }
