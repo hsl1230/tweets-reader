@@ -1,10 +1,11 @@
-package com.henry.tweetsreader.service;
+package com.henry.tweetsreader.main;
 
 import java.util.Hashtable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.henry.tweetsreader.AppUtils;
 
+import com.henry.tweetsreader.service.TwitterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;

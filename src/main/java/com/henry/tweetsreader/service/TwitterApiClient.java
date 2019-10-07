@@ -10,7 +10,9 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.Map;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,27 +24,32 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StopWatch;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+@Service
 public class TwitterApiClient {
-  private static final String BASE_URL = "https://api.twitter.com";
   private static final Logger LOG = LoggerFactory.getLogger(TwitterApiClient.class);
   private RestTemplate restTemplate;
-  private static final String ACCESS_TOKEN =
-      "AAAAAAAAAAAAAAAAAAAAAEf4AAEAAAAAitZNmH24%2FqilGRjU2Bqul9SV5QI%3D6Qiqa4oQ7vgD"
-          + "MFc2LNl1gIUrIE7bC7wUetivCOAy6We8n747gc";
 
+  @Value("${app.twitterApi.baseUrl:https://api.twitter.com}")
+  private String baseUrl;
+  @Value("${app.twitterApi.accessToken:AAAAAAAAAAAAAAAAAAAAAEf4AAEAAAAAitZNmH24%2F"
+      + "qilGRjU2Bqul9SV5QI%3D6Qiqa4oQ7vgDMFc2LNl1gIUrIE7bC7wUetivCOAy6We8n747gc}")
+  private String accessToken;
   
   /**
    * constructor of Twitter api client, RestTemplate instance will be created.
    * @param readTimeout request read timeout
    * @param connectTimeout connection timeout
    */
-  public TwitterApiClient(final Integer readTimeout, final Integer connectTimeout) {
+  public TwitterApiClient(
+      @Value("${app.twitterApi.readTimeout:5000}") int readTimeout,
+      @Value("${app.twitterApi.connectTimeout:1000}") int connectTimeout) {
     final HttpComponentsClientHttpRequestFactory requestFactory =
         new HttpComponentsClientHttpRequestFactory();
     requestFactory.setConnectTimeout(connectTimeout);
@@ -256,7 +263,7 @@ public class TwitterApiClient {
 
 
   private String getAccessToken() {
-    return ACCESS_TOKEN;
+    return accessToken;
   }
 
   private RestTemplate getRestTemplate() {
@@ -265,7 +272,7 @@ public class TwitterApiClient {
 
 
   private String getBaseUrl() {
-    return BASE_URL;
+    return baseUrl;
   }
 
   private static void traceRequest(HttpRequest request, byte[] body) {

@@ -1,4 +1,4 @@
-package com.henry.tweetsreader.service;
+package com.henry.tweetsreader.main;
 
 import java.io.BufferedReader;
 import java.io.IOException;

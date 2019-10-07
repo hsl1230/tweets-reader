@@ -1,5 +1,6 @@
 package com.henry.tweetsreader.service;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Hashtable;
 
@@ -51,7 +52,7 @@ public class ContextService {
     }
   }
 
-  public boolean setTopicInitialized(String topic, boolean value) {
+  public void setTopicInitialized(String topic, boolean value) {
     topicIntializedFlags.put(topic, value);
   }
 }

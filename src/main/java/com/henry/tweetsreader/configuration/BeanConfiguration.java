@@ -1,7 +1,6 @@
 package com.henry.tweetsreader.configuration;
 
-import com.henry.tweetsreader.service.ConsoleOperator;
-import com.henry.tweetsreader.service.TwitterApiClient;
+import com.henry.tweetsreader.main.ConsoleOperator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -39,8 +38,8 @@ public class BeanConfiguration {
    */
   @Bean
   public ThreadPoolTaskExecutor tweetsReaderExecutor(
-      @Value("${consumerPool.coreSize:5}") int coreSize,
-      @Value("${consumerPool.queueSize:10}") int queueSize
+      @Value("${app.tweetsReader.pool.coreSize:5}") int coreSize,
+      @Value("${app.tweetsReader.pool.queueSize:10}") int queueSize
   ) {
     ThreadPoolTaskExecutor poolTaskExecutor = new ThreadPoolTaskExecutor();
     System.out.println("pool size : " + coreSize);
@@ -52,13 +51,5 @@ public class BeanConfiguration {
     poolTaskExecutor.initialize();
 
     return poolTaskExecutor;
-  }
-
-  @Bean
-  public TwitterApiClient twitterApiClient(
-      @Value("${app.readTimeout:5000}") int readTimeout,
-      @Value("${app.connectTimeout:1000}") int connectTimeout
-  ) {
-    return new TwitterApiClient(readTimeout, connectTimeout);
   }
 }
