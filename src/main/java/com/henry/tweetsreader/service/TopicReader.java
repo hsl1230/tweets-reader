@@ -1,18 +1,20 @@
 package com.henry.tweetsreader.service;
 
-import com.henry.tweetsreader.AppUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
-
 import java.util.Hashtable;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import com.henry.tweetsreader.AppUtils;
+
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 public class TopicReader implements Runnable {
   private static final Logger LOG = LoggerFactory.getLogger(TopicReader.class);
 
   private String topic;
   private TwitterService twitterService;
+
+  // * AtomicBoolean is used here as an replacement of lock to minimize contention. 
   private static final Hashtable<String, AtomicBoolean> workingStatus = new Hashtable<>();
 
   /**
@@ -34,6 +36,13 @@ public class TopicReader implements Runnable {
     this.twitterService = twitterService;
   }
 
+
+  /**
+   * return the status of the task.
+   * true: is running
+   * false: not started or finished.
+   * multi task on the same topic should be prevented.
+   */
   public boolean isRunning() {
     AtomicBoolean topicRunning = workingStatus.get(topic);
     if (topicRunning == null) {
@@ -43,6 +52,9 @@ public class TopicReader implements Runnable {
     return topicRunning.get();
   }
 
+  /**
+   * read tweets by sending one rest request.
+   */
   @Override
   public void run() {
     AtomicBoolean topicRunning = workingStatus.get(topic);
@@ -51,6 +63,7 @@ public class TopicReader implements Runnable {
       workingStatus.put(topic, topicRunning);
     }
 
+    // check if any other task is doing the same thing.
     while (!topicRunning.compareAndSet(false, true)) {
       AppUtils.sleep(1000, "waiting for end of the task of topic " + topic);
     }

@@ -1,6 +1,15 @@
 package com.henry.tweetsreader.service;
 
-import org.slf4j.Logger;
+import static java.util.Collections.singletonList;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.util.Map;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -19,16 +28,6 @@ import org.springframework.util.StopWatch;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.util.Map;
-
-import static java.util.Collections.singletonList;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
-
 public class TwitterApiClient {
   private static final String BASE_URL = "https://api.twitter.com";
   private static final Logger LOG = LoggerFactory.getLogger(TwitterApiClient.class);
@@ -37,6 +36,12 @@ public class TwitterApiClient {
       "AAAAAAAAAAAAAAAAAAAAAEf4AAEAAAAAitZNmH24%2FqilGRjU2Bqul9SV5QI%3D6Qiqa4oQ7vgD"
           + "MFc2LNl1gIUrIE7bC7wUetivCOAy6We8n747gc";
 
+  
+  /**
+   * constructor of Twitter api client, RestTemplate instance will be created.
+   * @param readTimeout request read timeout
+   * @param connectTimeout connection timeout
+   */
   public TwitterApiClient(final Integer readTimeout, final Integer connectTimeout) {
     final HttpComponentsClientHttpRequestFactory requestFactory =
         new HttpComponentsClientHttpRequestFactory();
@@ -57,6 +62,9 @@ public class TwitterApiClient {
     }));
   }
 
+  /**
+   * forward rest request to rest template.
+   */
   public <RequestBody, ResponseBody> ResponseBody doExchange(
       String path,
       Map<String, String> queryParameters,
@@ -76,6 +84,9 @@ public class TwitterApiClient {
     }
   }
 
+  /**
+   * forward rest request to rest template.
+   */
   public <RequestBody, ResponseBody> ResponseBody doExchange(
       String path,
       Map<String, String> queryParameters,
@@ -98,6 +109,9 @@ public class TwitterApiClient {
     }
   }
 
+  /**
+   * convenient method for POST request.
+   */
   public <RequestBody, ResponseBody> ResponseBody doPost(
       String path,
       RequestBody requestBody,
@@ -106,6 +120,9 @@ public class TwitterApiClient {
     return doExchange(path, null, responseType, HttpMethod.POST, requestBody, null);
   }
 
+  /**
+   * convenient method for POST request.
+   */  
   public <RequestBody, ResponseBody> ResponseBody doPost(
       String path,
       RequestBody requestBody,
@@ -114,6 +131,9 @@ public class TwitterApiClient {
     return doExchange(path, null, responseType, HttpMethod.POST, requestBody, null);
   }
 
+  /**
+   * convenient method for POST request.
+   */  
   public <RequestBody, ResponseBody> ResponseBody doPost(
       String path,
       RequestBody requestBody,
@@ -123,6 +143,9 @@ public class TwitterApiClient {
     return doExchange(path, null, responseType, HttpMethod.POST, requestBody, headers);
   }
 
+  /**
+   * convenient method for POST request.
+   */
   public <RequestBody, ResponseBody> ResponseBody doPost(
       String path,
       RequestBody requestBody,
@@ -132,6 +155,9 @@ public class TwitterApiClient {
     return doExchange(path, null, responseType, HttpMethod.POST, requestBody, headers);
   }
 
+  /**
+   * convenient method for GET request.
+   */
   public <T> T doGet(
       String path,
       Map<String, String> queryParameters,
@@ -141,7 +167,9 @@ public class TwitterApiClient {
     return doExchange(path, queryParameters, responseType, GET, null, headers);
   }
 
-
+  /**
+   * convenient method for GET request.
+   */
   public <T> T doGet(
       String path,
       Map<String, String> queryParameters,
@@ -151,6 +179,9 @@ public class TwitterApiClient {
     return doExchange(path, queryParameters, responseType, GET, null, headers);
   }
 
+  /**
+   * convenient method for GET request.
+   */  
   public<T> T doGet(
       String path,
       Map<String, String> queryParameters,
@@ -159,6 +190,9 @@ public class TwitterApiClient {
     return doGet(path, queryParameters, responseType, null);
   }
   
+  /**
+   * convenient method for GET request.
+   */  
   public<T> T doGet(
       String path,
       Map<String, String> queryParameters,
