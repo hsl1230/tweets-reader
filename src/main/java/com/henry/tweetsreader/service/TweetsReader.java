@@ -1,16 +1,16 @@
 package com.henry.tweetsreader.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.henry.tweetsreader.AppUtils;
-import org.slf4j.Logger;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class TweetsReader {
@@ -23,6 +23,11 @@ public class TweetsReader {
   @Autowired
   private TwitterService twitterService;
 
+
+  /**
+   * periodly read and save tweets of specified topics.
+   * @param topics topics to be processed.
+   */
   public void readTopics(List<String> topics) {
     Assert.notEmpty(topics, "topics must be specified");
 
