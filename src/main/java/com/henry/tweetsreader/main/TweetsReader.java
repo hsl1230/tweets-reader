@@ -43,6 +43,7 @@ public class TweetsReader {
   public void readTopics(Set<String> topics) {
     Assert.notEmpty(topics, "topics must be specified");
 
+    LOG.info("Crawling tweets of topics: " + topics.toString());
     List<TopicReader> topicReaders = new ArrayList<>();
     topics.forEach(
         topic -> topicReaders.add(

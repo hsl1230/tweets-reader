@@ -6,6 +6,10 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.Objects;
 
+/**
+ * The wrapper of System.in, System.out.
+ * Doing this to make class using System.in, System.out testable.
+ */
 public class ConsoleOperator {
   private final BufferedReader reader;
   private final PrintWriter writer;
@@ -27,8 +31,8 @@ public class ConsoleOperator {
     return reader.readLine();
   }
 
-  public void print(String str) throws IOException {
-    writer.print(str);
+  public void printf(String str, Object ... objects) {
+    writer.printf(str, objects);
     writer.flush();
   }
 }

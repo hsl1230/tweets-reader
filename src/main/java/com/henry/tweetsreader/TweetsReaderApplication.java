@@ -22,7 +22,7 @@ public class TweetsReaderApplication {
   }
 
   @Component
-  public class MyRunner implements ApplicationRunner {
+  public static class MyRunner implements ApplicationRunner {
     private ConsoleOperator consoleOperator;
     private TweetsReader tweetsReader;
     private ContextService contextService;
@@ -72,14 +72,17 @@ public class TweetsReaderApplication {
 
       if (topics.size() < 5) {
         for (int i = topics.size() + 1; i < 6;) {
-          consoleOperator.print("Please input topic " + i + ": ");
-          String topic = consoleOperator.readLine().trim();
-          if (topics.contains(topic)) {
-            System.err.printf("topic [%s] is already in the list!\n", topic);
-          }
-          if (topic != null && !topic.isEmpty()) {
-            topics.add(topic);
-            i = topics.size() + 1;
+          consoleOperator.printf("Please input more topics (%d-5): ", i);
+          String inputLine = consoleOperator.readLine();
+          for (String topic : inputLine.split("[^\\w]")) {
+            if (topic.isEmpty()) {
+              continue;
+            } else if (topics.contains(topic)) {
+              consoleOperator.printf("topic [%s] is already in the list!\n", topic);
+            } else {
+              topics.add(topic);
+              i = topics.size() + 1;
+            }
           }
         }
       }
