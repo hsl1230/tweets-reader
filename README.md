@@ -1,5 +1,5 @@
 # tweets-reader
-  Scrawling tweets of specified topics to separated files
+  Scrawling tweets of specified topics to separated files, for more details please see [HELP.md](./HELP.md)
 
 ## Prerequisites
   git 2.6 or above is installed
