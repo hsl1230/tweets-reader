@@ -10,8 +10,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 public class TweetsReaderApplication {
@@ -50,13 +51,12 @@ public class TweetsReaderApplication {
      */
     @Override
     public void run(ApplicationArguments args) throws Exception {
-      List<String> topics = null;
+      Set<String> topics = new HashSet<>();
       if (args.containsOption("topic")) {
-        topics = args.getOptionValues("topic");
-      }
-
-      if (topics == null) {
-        topics = new ArrayList<>();
+        List<String> topicsFromParams = args.getOptionValues("topic");
+        if (topicsFromParams != null) {
+          topics.addAll(topicsFromParams);
+        }
       }
 
       String outputPath = null;
@@ -74,9 +74,12 @@ public class TweetsReaderApplication {
         for (int i = topics.size() + 1; i < 6;) {
           consoleOperator.print("Please input topic " + i + ": ");
           String topic = consoleOperator.readLine().trim();
+          if (topics.contains(topic)) {
+            System.err.printf("topic [%s] is already in the list!\n", topic);
+          }
           if (topic != null && !topic.isEmpty()) {
             topics.add(topic);
-            i++;
+            i = topics.size() + 1;
           }
         }
       }

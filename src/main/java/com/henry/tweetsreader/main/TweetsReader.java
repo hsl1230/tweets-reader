@@ -2,6 +2,7 @@ package com.henry.tweetsreader.main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.henry.tweetsreader.AppUtils;
 
@@ -39,7 +40,7 @@ public class TweetsReader {
    * periodly read and save tweets of specified topics.
    * @param topics topics to be processed.
    */
-  public void readTopics(List<String> topics) {
+  public void readTopics(Set<String> topics) {
     Assert.notEmpty(topics, "topics must be specified");
 
     List<TopicReader> topicReaders = new ArrayList<>();

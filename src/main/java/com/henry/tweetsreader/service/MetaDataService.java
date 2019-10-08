@@ -37,8 +37,7 @@ public class MetaDataService {
     }
 
     try {
-      FileStore fileStore = Files.getFileStore(path);
-      if (fileStore.supportsFileAttributeView(UserDefinedFileAttributeView.class)) {
+      if (path.getFileSystem().supportedFileAttributeViews().contains("user")) {
         UserDefinedFileAttributeView attsView = Files.getFileAttributeView(
             path, UserDefinedFileAttributeView.class);
         if (attsView.list().contains("maxTweetId")) {
@@ -51,6 +50,8 @@ public class MetaDataService {
               StandardCharsets.UTF_8.decode(buf).toString()
           );
         }
+      } else {
+        LOG.warn("#######UserDefinedFileAttributeView is not supported");
       }
     } catch (Exception ex) {
       LOG.warn("tweet id can not be extracted from the file attribute", ex);
@@ -72,16 +73,16 @@ public class MetaDataService {
     }
 
     try {
-      FileStore fileStore = Files.getFileStore(path);
-      if (fileStore.supportsFileAttributeView(UserDefinedFileAttributeView.class)) {
+      if (path.getFileSystem().supportedFileAttributeViews().contains("user")) {
         UserDefinedFileAttributeView attsView = Files.getFileAttributeView(
             path, UserDefinedFileAttributeView.class);
         ByteBuffer buffer = Charset.defaultCharset().encode(String.valueOf(value));
         attsView.write("maxTweetId", buffer);
+      } else {
+        LOG.warn("UserDefinedFileAttributeView is not supported");
       }
     } catch (Exception ex) {
       LOG.warn("tweet id can not be saved into the file attribute", ex);
     }
-
   }
 }
